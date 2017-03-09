@@ -1,0 +1,6 @@
+{
+  "name": "induction-game",
+  "dependencies": {
+    "phaser": "~2.6.2"
+  }
+}
