@@ -14,6 +14,8 @@ function preload() {
 
 }
 
+var globalState = {};
+
 var map;
 var layer;
 var cursors;
@@ -23,14 +25,22 @@ var devs, dev;
 var actionKeys;
 var hitDev, interactionText, isInteracting;
 var devs, devsArray = [], devsInfo = [
-    {'name': 'Fabricio Sodano', 'avatar': 'https://avatars.githubusercontent.com/fsodano', 'position': {'x': 32, 'y': 208}},
+    {
+        'name': 'Fabricio Sodano',
+        'avatar': 'https://avatars.githubusercontent.com/fsodano',
+        'position': {'x': 32, 'y': 208}
+    },
     {
         'name': 'Sebastien Caietta',
         'avatar': 'https://avatars.githubusercontent.com/sebastiencaietta',
         'position': {'x': 32, 'y': 256}
     },
-    {'name': 'Marcos Duarte', 'avatar': 'https://avatars.githubusercontent.com/maarcosd', 'position': {'x': 32, 'y': 304}}
-]
+    {
+        'name': 'Marcos Duarte',
+        'avatar': 'https://avatars.githubusercontent.com/maarcosd',
+        'position': {'x': 32, 'y': 304}
+    }
+];
 var dialogOptions = [
     {'text': 'What do you do?', 'callback': job},
     {'text': 'What\'s your story?', 'callback': story},
@@ -44,12 +54,14 @@ function createDevs() {
     devs = game.add.group();
     devs.enableBody = true;
     for (var index in devsInfo) {
-        var devInfo = devsInfo[index];
-        dev = devs.create(devInfo.position.x, devInfo.position.y, 'player', 2);
-        devsArray.push(dev);
+        if (devsInfo.hasOwnProperty(index)) {
+            var devInfo = devsInfo[index];
+            dev = devs.create(devInfo.position.x, devInfo.position.y, 'player', 2);
+            dev.key = 'p' + index;
+            dev.information = devInfo;
+            devsArray.push(dev);
+        }
     }
-
-
 }
 
 function job() {
@@ -78,21 +90,14 @@ function initWalkingState() {
     interactionText = game.add.text(32, 32, '', {fontSize: '32px', backgroundColor: '#fff'});
 }
 
-function getTalkingDev()
-{
-    for (var index in devsArray) {
-        var dev = devsArray[index];
-        console.log(dev.body.touching);
-    }
-}
-
 function interact() {
     if (hitDev) {
-        var correspondingDev = getTalkingDev();
+        var dev = window.globalState.activeDeveloper;
         var y;
+
         dialogIndex = 0;
         isInteracting = true;
-        interactionText.text = "Hi, I'm dev, what do you want to know about me?";
+        interactionText.text = "Hi, I'm " + dev.information.name + ", what do you want to know about me?";
         dialogChoiceIcon = game.add.sprite(32, 96, 'player', 1);
         dialogMenu = [];
         for (var i = 0; i < dialogOptions.length; i++) {
@@ -178,7 +183,9 @@ function create() {
 function update() {
 
     game.physics.arcade.collide(player, layer);
-    hitDev = game.physics.arcade.overlap(player, devs);
+    hitDev = game.physics.arcade.overlap(player, devs, function (thePlayer, theDev) {
+        window.globalState.activeDeveloper = theDev;
+    });
 
     player.body.velocity.set(0);
     moving = false;
