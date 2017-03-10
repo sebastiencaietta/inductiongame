@@ -28,17 +28,23 @@ var devs, devsArray = [], devsInfo = [
     {
         'name': 'Fabricio Sodano',
         'avatar': 'https://avatars.githubusercontent.com/fsodano',
-        'position': {'x': 32, 'y': 208}
+        'position': {'x': 32, 'y': 208},
+        'job': 'I\'m a software engineer in the ProjectX team',
+        'story': 'I am from Argentina and love football',
     },
     {
         'name': 'Sebastien Caietta',
         'avatar': 'https://avatars.githubusercontent.com/sebastiencaietta',
-        'position': {'x': 32, 'y': 256}
+        'position': {'x': 32, 'y': 256},
+        'job': 'I\'m a software engineer in the Hosts team',
+        'story': 'I am from France and love Dota',
     },
     {
         'name': 'Marcos Duarte',
         'avatar': 'https://avatars.githubusercontent.com/maarcosd',
-        'position': {'x': 32, 'y': 304}
+        'position': {'x': 32, 'y': 304},
+        'job': 'I\'m a software engineer in the Hosts team',
+        'story': 'I am from Brazil and love Crossfit',
     }
 ];
 var dialogOptions = [
@@ -81,13 +87,20 @@ function clearInteractionState() {
     initWalkingState();
     cursors.up.onDown.removeAll();
     cursors.down.onDown.removeAll();
-
 }
 
 function initWalkingState() {
     actionKeys = game.input.keyboard.addKeys({'enter': Phaser.KeyCode.ENTER});
     actionKeys.enter.onDown.add(interact, this);
     interactionText = game.add.text(32, 32, '', {fontSize: '32px', backgroundColor: '#fff'});
+}
+
+function job(dev) {
+    interactionText.text = dev.information.job;
+}
+
+function story(dev) {
+    interactionText.text = dev.information.story;
 }
 
 function interact() {
@@ -130,7 +143,7 @@ function interact() {
         actionKeys.enter.onDown.removeAll();
         actionKeys.enter.onDown.add(
             function () {
-                dialogOptions[dialogIndex].callback()
+                dialogOptions[dialogIndex].callback(dev)
             }, this);
     }
 }
