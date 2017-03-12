@@ -70,12 +70,6 @@ function createDevs() {
     }
 }
 
-function job() {
-    console.log('job');
-}
-function story() {
-    console.log('story');
-}
 function clearInteractionState() {
     isInteracting = false;
     for (i = 0; i < dialogMenu.length; i++) {
@@ -207,22 +201,22 @@ function update() {
     if (!isInteracting) {
         if (cursors.left.isDown) {
             moving = true;
-            player.body.velocity.x = -200;
+            player.body.velocity.x = -300;
             player.play('left');
         }
         if (cursors.right.isDown) {
             moving = true;
-            player.body.velocity.x = 200;
+            player.body.velocity.x = 300;
             player.play('right');
         }
         if (cursors.up.isDown) {
             moving = true;
-            player.body.velocity.y = -200;
+            player.body.velocity.y = -300;
             player.play('up');
         }
         if (cursors.down.isDown) {
             moving = true;
-            player.body.velocity.y = 200;
+            player.body.velocity.y = 300;
             player.play('down');
         }
     }
